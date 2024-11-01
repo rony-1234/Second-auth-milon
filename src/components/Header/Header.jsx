@@ -1,11 +1,28 @@
-import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthProvider";
 
 
 const Header = () => {
+
+     const {user,logOut }  = useContext(AuthContext)
+
+      const handleLogout = () =>{
+        logOut()
+        .then(result =>{
+          console.log(result.user)
+        })
+        .catch(error =>{
+          console.log(error, 'The invalid error message')
+        })
+      }
     const links = <> 
     <li><NavLink to="/">Home</NavLink></li>
     <li><NavLink to='/login'>Login</NavLink></li>
     <li><NavLink to='/register'>Register</NavLink></li>
+    <li><NavLink to='/orders'>Orders</NavLink></li>
+
+    
     
      </>
     return (
@@ -33,7 +50,7 @@ const Header = () => {
              {links}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a className="btn btn-ghost text-xl">Second-moha-milon</a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -41,7 +58,18 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {
+            user ? <>
+            <span>{user.email}</span>
+            <a onClick={handleLogout} className="btn btn-sm">Sign Out</a>
+            
+            </> :
+
+            <Link to='/login'>
+               <a onClick={handleLogout} className="btn btn-sm">Login</a>
+            </Link>
+          }
+          
         </div>
       </div>
     );
