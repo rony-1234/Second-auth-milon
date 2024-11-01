@@ -1,10 +1,21 @@
 import { useContext } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Login = () => {
-    const {signIn} = useContext(AuthContext)
+    const {signIn,signWithGoogle} = useContext(AuthContext)
+    const navigate = useNavigate()
+
+    const handleGoogleSign = () =>{
+      signWithGoogle()
+      .then(result =>{
+        console.log(result.user)
+      })
+      .catch(error =>{
+        console.error(error , 'invalid message')
+      })
+    }
 
     const handleSignIn = (e) =>{
         e.preventDefault()
@@ -17,6 +28,9 @@ const Login = () => {
         signIn(email,password)
         .then(res =>{
             console.log(res.user)
+            e.target.reset()
+            navigate('/')
+
         })
         .catch(error =>{
             console.log(error,"invalid error")
@@ -53,6 +67,10 @@ const Login = () => {
               </div>
             </form>
             <p>New here ? please register <Link to='/register'>Register</Link></p>
+             <p>
+             <button onClick={handleGoogleSign} className="btn btn-ghost">Google</button>
+             </p>
+         
           </div>
         </div>
       </div>
